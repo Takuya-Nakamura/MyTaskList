@@ -7,8 +7,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../components/aniamted_icon_button.dart';
-
 import '../components/heart_rate.dart';
+import '../components/icon_switch.dart';
+import '../components/icon_check.dart';
 
 class TaskEdit extends StatefulWidget {
   //params
@@ -152,7 +153,7 @@ class _TaskEditState extends State<TaskEdit> {
                         });
                       },
                       decoration: InputDecoration(
-                        labelText: 'やりたいことを書いてね♥',
+                        labelText: 'タイトル',
                         enabledBorder: styles.Border.enableFormBorder,
                         focusedBorder: styles.Border.focusFormBorder,
                       ),
@@ -161,10 +162,8 @@ class _TaskEditState extends State<TaskEdit> {
                 )),
 
             // animetateIcon(),
-            HeartRate(), memoForm(), selectForm(),
-            wantRateForm(),
-            statusForm(),
-            categoryForm(), saveButton(),
+            memoForm(), selectForm(),
+            wantRateForm(), categoryForm(), statusForm(), saveButton(),
           ],
         ))));
   }
@@ -218,7 +217,7 @@ class _TaskEditState extends State<TaskEdit> {
               },
               decoration: InputDecoration(
                 // labelText: 'なんか細かいこと書きたかったらどうぞ',
-                labelText: '細かいメモ♥',
+                labelText: 'メモ',
                 enabledBorder: styles.Border.enableFormBorder,
                 focusedBorder: styles.Border.focusFormBorder,
               ),
@@ -254,52 +253,26 @@ class _TaskEditState extends State<TaskEdit> {
         padding: formPadding,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          formLabel('どれぐらいやりたい？'),
-          RatingBar.builder(
-            initialRating: 1,
-            minRating: 1,
-            direction: Axis.horizontal,
-            itemCount: 5,
-            itemSize: 30.0,
-            itemPadding: EdgeInsets.symmetric(horizontal: 3.0),
-            itemBuilder: (context, _) =>
-                Icon(Icons.favorite, color: Colors.pink),
-            onRatingUpdate: (rating) {
-              print(rating);
-            },
-          )
+          formLabel('どれぐらい実現したい？'),
+          HeartRate(),
         ]));
   }
 
   Widget statusForm() {
     initializeDateFormatting('ja');
     var format = new DateFormat.yMMMd('ja');
-
     return Padding(
         padding: formPadding,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              formLabel('達成済み？'),
-              Switch(
-                value: isSwitched,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                  });
-                },
-                activeTrackColor: Colors.yellow,
-                activeColor: Colors.orangeAccent,
-              ),
-              // Column(
-              //   children: <Widget>[
-              //     new RaisedButton(
-              //       onPressed: () => _selectDate(context),
-              //       child: new Text("${format.format(_date)}"),
-              //     )
-              //   ],
-              // )
-            ]));
+        child: Container(
+            height: 85,
+            child: Center(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                  formLabel('進捗状況'),
+                  IconCheck(),
+                ]))));
   }
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -314,12 +287,10 @@ class _TaskEditState extends State<TaskEdit> {
   Widget categoryForm() {
     return Padding(
         padding: formPadding,
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          formLabel('タイプを選択'),
-          ElevatedButton(child: Text("娯楽")),
-          ElevatedButton(child: Text("努力")),
-        ]));
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [formLabel('たのしみ？ つらい?'), IconSwitch()]));
   }
 
   Widget saveButton() {
@@ -329,7 +300,7 @@ class _TaskEditState extends State<TaskEdit> {
         onClickSave();
       },
       child: Text(
-        "作成",
+        "保存",
       ),
     ));
   }
@@ -362,15 +333,6 @@ final List<String> data = [
 ];
 
 final List<String> years = [
-  '2010',
-  '2011',
-  '2012',
-  '2013',
-  '2014',
-  '2015',
-  '2016',
-  '2017',
-  '2018',
   '気が向いたらー',
   'そのうち',
 ];
